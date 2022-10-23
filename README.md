@@ -43,6 +43,7 @@ This repository is intended to be used as a template for development with AWS CD
 - [Docker Compose](https://github.com/docker/compose)
 - (Optional) [NVIDIA Container Toolkit (nvidia-docker2)](https://github.com/NVIDIA/nvidia-docker)
 - [AWS Cloud Development Kit (AWS CDK)](https://github.com/aws/aws-cdk)
+- [AWS Cloud Development Kit Library](https://pypi.org/project/aws-cdk-lib/)
 - (Optional) [AWS Serverless Application Model (SAM)](https://github.com/aws/serverless-application-model)
 
 **NOTE**: Example codes in the README.md are written for `Docker Compose v2`. However, Ascender also should work under `Docker Compose v1`. If you are using `Docker Compose v1`, just replace `docker compose` in the example code by `docker-compose`.
@@ -92,13 +93,17 @@ $ sudo systemctl restart docker
 
 If `sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi` works, installation succeeded.
 
-### AWS Cloud Development Kit (AWS CDK)
+### AWS Cloud Development Kit (AWS CDK) and AWS Cloud Development Kit Library
 
 ```bash
+# Install AWS CDK
 $ npm i -g aws-cdk
+
+# Install AWS Cloud Development Kit Library
+$ pip3 install aws-cdk-lib
 ```
 
-You can check installed version by `cdk --version`.
+You can check installed AWS CDK version by `cdk --version`.
 
 ### (Optional) AWS Serverless Application Model (SAM)
 
@@ -156,8 +161,9 @@ $ curl -X GET http://127.0.0.1:3000/sample
 # Synthesizes CloudFormation template. This command creates some files under `cdk.out`
 $ cdk synth
 
-# Build and deploy
+# Build bootstrapping and deploy
 $ sam build -t cdk.out/sample-minimal.template.json
+$ cdk bootstrap
 $ cdk deploy
 
 # If it succeeded, AWS resources are created
