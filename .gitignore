@@ -1,7 +1,9 @@
 data/*
 models/*
 outputs/*
+cdk.out
 __pycache__
+.aws-sam
 .coverage
 .mypy_cache
 .pytest_cache
