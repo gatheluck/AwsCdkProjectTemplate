@@ -1,51 +1,39 @@
-# Ascender
+# AWS CDK Project Template
 
-![python versions](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)
-[![tests](https://github.com/cvpaperchallenge/Ascender/actions/workflows/lint-and-test.yaml/badge.svg)](https://github.com/cvpaperchallenge/Ascender/actions/workflows/lint-and-test.yaml)
 [![MIT License](https://img.shields.io/github/license/cvpaperchallenge/Ascender?color=green)](LICENSE)
 
-## What is Ascender?
+## What is this repository?
 
-Ascender (Accelerator of SCiENtific DEvelopment and Research) is a [GitHub repository template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository) for research projects using Python as a developing language. The following features are pre-implemented to accelerate your development:
+This repository is intended to be used as a template for development with AWS CDK. 
 
-
-- **Container**: Use of [Docker](https://www.docker.com/) reduces development environment dependencies and improves code portability.
-- **Virtual environment / package management**: Package management using [Poetry](https://python-poetry.org/) improves reproducibility of the same environment.
-- **Coding style**: Automatic code style formatting using [Black](https://github.com/psf/black), [Flake8](https://github.com/pycqa/flake8), and [isort](https://github.com/PyCQA/isort).
-- **Static type check**: Static type checking with [Mypy](https://github.com/python/mypy) to assist in finding bugs.
-- **pytest**: Easily add test code using [pytest](https://github.com/pytest-dev/pytest).
-- **GitHub features**: Some useful features, [workflow](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions) for style check and test for pull request, [issue template](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository), etc. are pre-implemented.
-
-Please check [the slide format resources about Ascender (Japanese)](https://cvpaperchallenge.github.io/Britannica/ascender/ja) too.
+**NOTE**: Since we are still in the process of trial and error to find the best configuration, there may be major configuration changes in the future.
 
 ## Project Organization
 
 ```
-    ├── .github/           <- Settings for GitHub.
+    ├── .github/                   <- Settings for GitHub.
     │
-    ├── data/              <- Datasets.
+    ├── environments/              <- Provision depends on environments.
     │
-    ├── environments/       <- Provision depends on environments.
+    ├── src/                       <- Source code. This sould be Python module.
+    :   :
+    │   ├── sample_minimal_lambda  <- Sample lambda code.
+    │   │
+    │   └── stacks                 <- Python code to define stacks.
     │
-    ├── models/            <- Pretrained and serialized models.
+    ├── tests/                     <- Test codes.
     │
-    ├── notebooks/         <- Jupyter notebooks.
-    │
-    ├── outputs/           <- Outputs.
-    │
-    ├── src/               <- Source code. This sould be Python module.
-    │
-    ├── tests/             <- Test codes.
-    │
-    ├── .flake8            <- Setting file for Flake8.
+    ├── .flake8                    <- Setting file for Flake8.
     ├── .dockerignore
     ├── .gitignore
+    ├── app.py                     <- Define application from stack.
+    ├── cdk.json                   <- Setting file for AWS CDK.
     ├── LICENSE
-    ├── Makefile           <- Makefile used as task runner. 
-    ├── poetry.lock        <- Lock file. DON'T edit this file manually.
-    ├── poetry.toml        <- Setting file for Poetry.
-    ├── pyproject.toml     <- Setting file for Project. (Poetry, Black, isort, Mypy)
-    └── README.md          <- The top-level README for developers.
+    ├── Makefile                   <- Makefile used as task runner. 
+    ├── poetry.lock                <- Lock file. DON'T edit this file manually.
+    ├── poetry.toml                <- Setting file for Poetry.
+    ├── pyproject.toml             <- Setting file for Project.
+    └── README.md                  <- The top-level README for developers.
 
 ```
 
@@ -54,6 +42,8 @@ Please check [the slide format resources about Ascender (Japanese)](https://cvpa
 - [Docker](https://www.docker.com/) 
 - [Docker Compose](https://github.com/docker/compose)
 - (Optional) [NVIDIA Container Toolkit (nvidia-docker2)](https://github.com/NVIDIA/nvidia-docker)
+- [AWS Cloud Development Kit (AWS CDK)](https://github.com/aws/aws-cdk)
+- (Optional) [AWS Serverless Application Model (SAM)](https://github.com/aws/serverless-application-model)
 
 **NOTE**: Example codes in the README.md are written for `Docker Compose v2`. However, Ascender also should work under `Docker Compose v1`. If you are using `Docker Compose v1`, just replace `docker compose` in the example code by `docker-compose`.
 
@@ -102,106 +92,84 @@ $ sudo systemctl restart docker
 
 If `sudo docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi` works, installation succeeded.
 
+### AWS Cloud Development Kit (AWS CDK)
+
+```bash
+$ npm i -g aws-cdk
+```
+
+You can check installed version by `cdk --version`.
+
+### (Optional) AWS Serverless Application Model (SAM)
+
+In this template, we use AWS Serverless Application Model (SAM) to execute test locally.
+
+```bash
+$ pip install aws-sam-cli
+```
+
+You can check installed version by `sam --version`.
+
 ## Quick start
-
-Here, we explain how to start using Ascender. Please refer to [this slide (Japanese)](https://cvpaperchallenge.github.io/Britannica/ascender/ja) for detailed information.
-
-### Create GitHub repo from Ascender
-
-Fisrt of all, you need to create your own GitHub repo from Ascender as follows:
-
-- Visit [GitHub repo page of Ascender](https://github.com/cvpaperchallenge/Ascender).
-- Press ["Use this template"](https://github.com/cvpaperchallenge/Ascender/generate) button in the upper right part of the page.
-- Fill in the items on the page, and press "Create repository from template" button.
-
-Now, a new repo should be created from Ascender in your GitHub account.
 
 ### Start development
 
 ```bash
-# Clone repo
-$ git clone git@github.com:cvpaperchallenge/<YOUR_REPO_NAME>.git
-$ cd <YOUR_REPO_NAME>
-
 # Build Docker image and run container
-$ cd environments/gpu  # if you want to use only cpu, `cd environments/cpu` 
+$ cd environments/cpu
 $ sudo docker compose up -d
 
 # Run bash inside of container (jump into contaienr)
 $ sudo docker compose exec core bash
 
 # Create virtual environment and install dependent packages by Poetry
-$ poetry install
+% poetry install
 ```
 
-Now, you are ready to start development with Ascender.
+### Local test
+
+Here we explain how to run local test. To run test locally, we use AWS Serverless Application Model (SAM).
+
+```bash
+# Please run followings from out side of the container
+# Synthesizes CloudFormation template. This command creates some files under `cdk.out`
+$ cdk synth
+
+# Build and start API locally
+$ sam build -t cdk.out/sample-minimal.template.json
+$ sam local start-api
+```
+
+Now you can test API at `http://127.0.0.1:3000/sample` by default. You can try and test API by using `curl` as follows:
+
+```bash
+# Send GET request from different terminal
+$ curl -X GET http://127.0.0.1:3000/sample
+
+{"torch_version": "1.12.1+cu102"}
+```
+
+### Deployment
+
+```bash
+# Please run followings from out side of the container
+# Synthesizes CloudFormation template. This command creates some files under `cdk.out`
+$ cdk synth
+
+# Build and deploy
+$ sam build -t cdk.out/sample-minimal.template.json
+$ cdk deploy
+
+# If it succeeded, AWS resources are created
+
+# Tear down all created AWS resources
+$ cdk destroy
+```
 
 ### Stop development
 
 ```bash
-# Stop container
-$ cd environments/gpu  # or `cd environments/cpu` 
-$ sudo dokcer compose stop
+$ cd environments/cpu
+$ sudo docker compose stop
+# If you want remove containers, please use `down` instead of `stop`
 ```
-
-## FAQ
-
-### Use Ascender without Docker
-
-We recommend using Ascender with Docker as described above. However, you might not be able to install Docker in your development environment due to permission issues or etc.
-
-In such cases, Ascender can be used without Docker. To do that, please install Poetry in your computer, and follow the steps describing in "Start development" section with ignoring the steps related to Docker.
-
-```bash
-# Install Poetry
-$ pip3 install poetry
-
-# Clone repo
-$ git clone git@github.com:<YOUR_USER_NAME>/<YOUR_REPO_NAME>.git
-$ cd <YOUR_REPO_NAME>
-
-# Create virtual environment and install dependent packages by Poetry
-$ poetry install
-```
-
-NOTE: CI job (GitHub Actions workflow) of Ascender is using Dockerfile. Therefore, using Ascender without Docker might raise error at CI job. In that case, please modify the Dockerfile appropriately or delete the CI job (`.github/workflows/lint-and-test.yaml`).
-
-### Permission error is raised when execute `poetry install`.
-
-Sometime `poetry install` might rise permission error like following:
-
-```bash
-$ poetry install
-...
-
-virtualenv: error: argument dest: the destination . is not write-able at /home/challenger/ascender
-```
-
-In that case, please check UID (user id) and GID (group id) at your local PC by following:
-
-```bash
-$ id -u $USER  # check UID
-$ id -g $USER  # check GID
-```
-
-In Ascender, default value of both is `1000`. If UID or GID of your local PC is not `1000`, you need to modify the value of `UID` or `GID` inside of `docker-compose.yaml` to align your local PC (please edit their values from `1000`). Or if environmental variables `HOST_UID` and `HOST_GID` is defined at host PC, Ascender uses these values.
-
-### Compatibility issue between PyTorch and Poetry
-
-NOTE: Now poetry 1.2 is used in Ascender. So this issue is expected to be solved.
-
-Currently, there is a compatibility issue between PyTorch and Poetry. This issue is being worked on by the Poetry community and is expected to be resolved in 1.2.0. (You can check pre-release of 1.2.0 from [here](https://github.com/python-poetry/poetry/releases/tag/1.2.0b3).) 
-
-We plan to incorporate Poetry 1.2.0 into Ascender immediately after its release. In the meantime, please consider using the workaround described in [this issue](https://github.com/python-poetry/poetry/issues/4231).
-
-**Some related GitHub issues**
-- https://github.com/python-poetry/poetry/issues/2339
-- https://github.com/python-poetry/poetry/issues/2543
-- https://github.com/python-poetry/poetry/issues/2613
-- https://github.com/python-poetry/poetry/issues/3855
-- https://github.com/python-poetry/poetry/issues/4231
-- https://github.com/python-poetry/poetry/issues/4704
-
-### Change the Python version to run CI jobs
-
-By default, CI job (GitHub Actions workflow) of Ascender is run against Python 3.8 and 3.9. If you want to change the target Python version, please modify [the matrix part of `.github/workflows/lint-and-test.yaml`](https://github.com/cvpaperchallenge/Ascender/blob/master/.github/workflows/lint-and-test.yaml#L18).
