@@ -1,26 +1,26 @@
 .PHONY: black-check
 black-check:
-	poetry run black --check src tests
+	poetry run black --check src/stacks src/sample_minimal_lambda tests app.py
 
 .PHONY: black
 black:
-	poetry run black src tests
+	poetry run black src/stacks src/sample_minimal_lambda tests app.py
 
 .PHONY: flake8
 flake8:
-	poetry run flake8 src tests
+	poetry run flake8 src/stacks src/sample_minimal_lambda tests app.py
 
 .PHONY: isort-check
 isort-check:
-	poetry run isort --check-only src tests
+	poetry run isort --check-only src/stacks src/sample_minimal_lambda tests app.py
 
 .PHONY: isort
 isort:
-	poetry run isort src tests
+	poetry run isort src/stacks src/sample_minimal_lambda tests app.py
 
 .PHONY: mypy
 mypy:
-	poetry run mypy src
+	poetry run mypy src/stacks src/sample_minimal_lambda app.py
 
 .PHONY: test
 test:
@@ -40,8 +40,5 @@ lint:
 
 .PHONY: test-all
 test-all:
-	$(MAKE) black
-	$(MAKE) flake8
-	$(MAKE) isort
-	$(MAKE) mypy
+	$(MAKE) lint
 	$(MAKE) test

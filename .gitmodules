@@ -1,0 +1,3 @@
+[submodule "src/lambda/sample_classification"]
+	path = src/lambda/sample_classification
+	url = git@github.com:gatheluck/SampleClassification.git
